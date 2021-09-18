@@ -1,0 +1,65 @@
+#main {
+    border-radius: 10px;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    max-width: 400px; 
+    height:250px; 
+}
+
+.host-only {
+    display: none;
+}
+
+h1, h2, h3, h4, h5, h6, p, tr, th, td {
+    color: white !important;
+}
+
+button, .uk-button {
+    border-radius: 10px !important;
+    text-transform: none !important;
+    font-weight: bold !important;
+}
+
+html {
+    background: linear-gradient(90deg, #191919 0%, #464646 100%);
+}
+
+.custom-nav {
+    height:60px;
+    border-bottom-left-radius:15px; 
+    border-bottom-right-radius:15px; 
+    overflow: hidden;
+}
+
+.black-gd {
+    background: linear-gradient(325.83deg, #383838 0%, #565656 100%) !important;
+}
+
+.blue-gd {
+    background: linear-gradient(325.83deg, #0071f1 0%, #2751c5 100%) !important;
+
+}
+
+
+.red-gd {
+    background: linear-gradient(325.83deg, #a12e2e 0%, #db0c0c 100%) !important;
+
+}
+
+
+.yellow-gd {
+    background: linear-gradient(325.83deg, #b69c0c 0%, #9e4a06 100%) !important;
+
+}
+
+.uk-card, .uk-input, .uk-modal-dialog {
+    border-radius: 10px;
+} 
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: #f1f1f1;
+}
