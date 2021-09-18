@@ -36,8 +36,8 @@ class App extends Component {
                     <Navbar />
                     <div className="uk-container">
                         <Switch>
-                            <Route path="/home">
-                                <Home />
+                            <Route path="/">
+                                <Home/>
                             </Route>
                         </Switch>
                     </div>
