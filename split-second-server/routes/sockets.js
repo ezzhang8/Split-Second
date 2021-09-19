@@ -13,8 +13,6 @@ module.exports = function sockets(io) {
 
             newRoom.addUser(newUser);
 
-            console.log(Room.all);
-
             socket.join(newRoom.code);
             callback({room: newRoom, user: newUser});
         });
@@ -31,5 +29,15 @@ module.exports = function sockets(io) {
                 callback({room: room, user: newUser})
             }  
         });
+
+        socket.on('userUpdate', (params, callback) => {
+            const room = Room.all.find((room) => room.code === params.code);
+            const user = room.users.find((user) => user.username === params.user.username)
+
+            user.events = params.user.events;
+
+            io.to(room.code).emit('joinUpdate', room);
+            callback(room);
+        })
     });
 }

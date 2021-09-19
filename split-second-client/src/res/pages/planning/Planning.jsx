@@ -17,6 +17,8 @@ export default function Planning() {
     useEffect(() => {
         if (state.user.username == undefined) {
             socket.emit('joinRoom', {code: id, timezone: timezoneOffset}, (res) => {
+                console.log(state.room);
+
                 dispatch({type: 'UPDATE_USER', payload: res.user});
                 dispatch({type: 'UPDATE_ROOM', payload: res.room});
             })
@@ -46,9 +48,6 @@ export default function Planning() {
     return (
         <div class="uk-container uk-margin-top">
             <div id="pre-game">
-                {
-                    console.log(state.user)
-                }
                 <h4 class="uk-margin-remove-bottom">Join with the code below.</h4>
                 <b><h1 id="join-code">{id}</h1></b>
                 

@@ -1,4 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { socket } from "../../api"
+
 import { Context } from '../store';
 import { months, daysInMonth } from "./dates";
 import Modal from 'react-modal';
@@ -23,20 +25,21 @@ export default function MonthView(props) {
     const [date, setDate] = useState(new Date());
     const days = daysInMonth(props.date.getMonth(), props.date.getFullYear());
 
-    const [conflicts, setConflicts] = useState({});
 
     const [modalIsOpen, setIsOpen] = useState(false);
+
+    const [events, setEvents] = useState([]);
 
 
     let firstDay = new Date(props.date.getFullYear(), props.date.getMonth(), 1);
     let dayTrack = 0;
 
-    function findGoodTimes(time) {
+    function findTimes(time, type) {
         let res = [];
         for (let user of state.room.users) {
-            for (let ev of user.events.enabled) {
+            for (let ev of user.events[type]) {
                 let evDate = new Date(ev);
-                if (evDate.toDateString() == time.toDateString()) {
+                if (evDate.toDateString() == time.toDateString() && evDate.getHours() == time.getHours()) {
                     res.push(user);
                 }
             }
@@ -45,29 +48,50 @@ export default function MonthView(props) {
         return res;
     }
 
+      
+
     function TimeSelector(props) {
         return (
             <div style={{ margin: "10px" }}>
                 <button style={{ backgroundColor: "red", margin: "5px" }} onClick={()=>{
                     dispatch({type: "ADD_DISABLED_EVENT", payload: new Date(date.getFullYear(), date.getMonth(), date.getDate(), props.value)})
-                    console.log(state.user)
-               }} className="uk-button uk-button-secondary">Bad Time</button>
+                    socket.emit('userUpdate', {code: state.room.code, user: state.user}, (res) => {
+                        dispatch({type: "UPDATE_ROOM", payload: res})
+                    })
+                }} className="uk-button uk-button-secondary">Bad Time</button>
                 <button style={{ width: "35%" }} disabled={true} className="uk-button uk-button-secondary">{props.label}</button>
                 <button style={{ backgroundColor: "green", margin: "5px" }} onClick={()=>{
                     dispatch({type: "ADD_ENABLED_EVENT", payload: new Date(date.getFullYear(), date.getMonth(), date.getDate(), props.value)})
-                    console.log(state.user)
+                    
+                    socket.emit('userUpdate', {code: state.room.code, user: state.user}, (res) => {
+                        dispatch({type: "UPDATE_ROOM", payload: res})
+                        
+                    
+                    })
+                    console.log(state.user);
+
+
+
+                    
                }} className="uk-button uk-button-secondary">Good Time</button>
                <p>{
-                   findGoodTimes(new Date(date.getFullYear(), date.getMonth(), date.getDate(), props.value)).map((user) => {
+                   findTimes(new Date(date.getFullYear(), date.getMonth(), date.getDate(), props.value), 'enabled').map((user) => {
                        return (
-                           <p>{user.username}</p>
+                           <p>{user.username} 👍</p>
                        )
                    })
+                   
+                } {
+                    findTimes(new Date(date.getFullYear(), date.getMonth(), date.getDate(), props.value), 'disabled').map((user) => {
+                        return (
+                            <p>{user.username} 
+                            👎</p>
+                        )
+                       })   
                 }</p>
             </div>
         )
-    }
-
+    }       
 
     return (
         <div>
@@ -87,9 +111,6 @@ export default function MonthView(props) {
                 </thead>
                 <tbody>
                     <tr>
-                        {
-                            console.log(firstDay)
-                        }
                         {[...Array(firstDay.getDay())].map((value) => {
                             return <td><h6></h6></td>
                         })}
