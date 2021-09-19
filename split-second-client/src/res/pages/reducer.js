@@ -1,11 +1,11 @@
 const Reducer = (state, action) => {
     switch(action.type) {
-        case 'UPDATE_ROOM':
+        case 'UPDATE_USER':
             return {
                 ...state,
                 user: action.payload
             }
-        case "UPDATE_USER":
+        case "UPDATE_ROOM":
             return {
                 ...state,
                 room: action.payload

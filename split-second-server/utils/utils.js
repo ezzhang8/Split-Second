@@ -18,9 +18,13 @@ class User {
 class Room {
     static all = [];
 
-    constructor() {
+    constructor(params) {
         this.code = this.generateRandomCode();
         this.users = [];
+        this.time = {
+            start: new Date(),
+            end: undefined
+        }
 
         Room.all.push(this);
     }

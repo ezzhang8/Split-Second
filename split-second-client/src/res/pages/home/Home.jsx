@@ -14,9 +14,9 @@ export default function Home() {
         const timezoneOffset = (new Date()).getTimezoneOffset();
 
         socket.emit('createRoom', { username: name, timezone: timezoneOffset }, (res) => {
-            history.push("/c/"+res.room.code);
             dispatch({type: 'UPDATE_USER', payload: res.user});
             dispatch({type: 'UPDATE_ROOM', payload: res.room});
+            history.push("/c/"+res.room.code);
 
         });
     }

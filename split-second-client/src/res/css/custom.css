@@ -18,10 +18,15 @@ button, .uk-button {
     border-radius: 10px !important;
     text-transform: none !important;
     font-weight: bold !important;
+    color: white;
+}
+
+.uk-button:hover {
+    color: white;
 }
 
 html {
-    background: linear-gradient(90deg, #191919 0%, #464646 100%);
+    background: #323232;
 }
 
 .custom-nav {
@@ -66,4 +71,15 @@ a:hover {
 
 .uk-modal-dialog {
     background-color: #191919;
+}
+
+th {
+    text-align: center !important;
+}
+.uk-card-small {
+    background-color: #191919;
+    
+}
+.month-day-card {
+    margin: 0 !important;
 }
