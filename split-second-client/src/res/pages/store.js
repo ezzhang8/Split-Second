@@ -3,7 +3,12 @@ import Reducer from './reducer'
 
 
 const initialState = {
-    user: {},
+    user: {
+        events: {
+            enabled: [],
+            disabled: []
+        }
+    },
     room: {},
     views: {
         currentCalendar: "month",

@@ -46,7 +46,9 @@ export default function Planning() {
     return (
         <div class="uk-container uk-margin-top">
             <div id="pre-game">
-
+                {
+                    console.log(state.user)
+                }
                 <h4 class="uk-margin-remove-bottom">Join with the code below.</h4>
                 <b><h1 id="join-code">{id}</h1></b>
                 

@@ -1,28 +1,22 @@
 import React, { useState, useContext } from 'react';
 import { Context } from '../store';
 import { months, daysInMonth } from "./dates";
+import Modal from 'react-modal';
 
 function MonthCard(props) {
     return (
-        <button disabled={props.disabled} onClick={() => props.setDate(new Date(props.currentDate.getFullYear(), props.currentDate.getMonth(), props.dateNum))} data-uk-toggle="target: #modal-close-react" 
-        //background: "linear-gradient(to right, red 20%, orange 20% 40%, yellow 40% 60%, green 60% 80%, blue 80%)",
-            style={{  width: "100%", padding: "25px", fontSize: "30px" }} 
+        <button type="button" onClick={() => {
+            props.setIsOpen(true);
+            props.setDate(new Date(props.currentDate.getFullYear(), props.currentDate.getMonth(), props.dateNum))
+        }}
+            //background: "linear-gradient(to right, red 20%, orange 20% 40%, yellow 40% 60%, green 60% 80%, blue 80%)",
+            style={{ width: "100%", padding: "25px", fontSize: "30px" }}
             class="uk-button uk-button-secondary">
             {props.dateNum}
         </button>
     )
 }
 
-function TimeSelector(props) {
-    return (
-        <div style={{margin: "10px"}}>
-            <button style={{backgroundColor: "red", margin: "5px"}}className="uk-button uk-button-secondary">X</button>
-            <button style={{width: "65%"}} disabled className="uk-button uk-button-secondary">{props.label}</button>
-            <button style={{backgroundColor: "green", margin: "5px"}} className="uk-button uk-button-secondary">V</button>
-
-        </div>
-    )
-}
 
 export default function MonthView(props) {
     const [state, dispatch] = useContext(Context);
@@ -31,10 +25,50 @@ export default function MonthView(props) {
 
     const [conflicts, setConflicts] = useState({});
 
+    const [modalIsOpen, setIsOpen] = useState(false);
+
+
     let firstDay = new Date(props.date.getFullYear(), props.date.getMonth(), 1);
     let dayTrack = 0;
 
-    
+    function findGoodTimes(time) {
+        let res = [];
+        for (let user of state.room.users) {
+            for (let ev of user.events.enabled) {
+                let evDate = new Date(ev);
+                if (evDate.toDateString() == time.toDateString()) {
+                    res.push(user);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    function TimeSelector(props) {
+        return (
+            <div style={{ margin: "10px" }}>
+                <button style={{ backgroundColor: "red", margin: "5px" }} onClick={()=>{
+                    dispatch({type: "ADD_DISABLED_EVENT", payload: new Date(date.getFullYear(), date.getMonth(), date.getDate(), props.value)})
+                    console.log(state.user)
+               }} className="uk-button uk-button-secondary">Bad Time</button>
+                <button style={{ width: "35%" }} disabled={true} className="uk-button uk-button-secondary">{props.label}</button>
+                <button style={{ backgroundColor: "green", margin: "5px" }} onClick={()=>{
+                    dispatch({type: "ADD_ENABLED_EVENT", payload: new Date(date.getFullYear(), date.getMonth(), date.getDate(), props.value)})
+                    console.log(state.user)
+               }} className="uk-button uk-button-secondary">Good Time</button>
+               <p>{
+                   findGoodTimes(new Date(date.getFullYear(), date.getMonth(), date.getDate(), props.value)).map((user) => {
+                       return (
+                           <p>{user.username}</p>
+                       )
+                   })
+                }</p>
+            </div>
+        )
+    }
+
+
     return (
         <div>
             <h3>{months[props.date.getMonth()]} {props.date.getFullYear()}</h3>
@@ -61,7 +95,7 @@ export default function MonthView(props) {
                         })}
                         {[...Array(7 - firstDay.getDay())].map((value) => {
                             dayTrack++;
-                            return <td><MonthCard currentDate={props.date} setDate={setDate} dateNum={dayTrack} /></td>
+                            return <td><MonthCard currentDate={props.date} setIsOpen={setIsOpen} setDate={setDate} dateNum={dayTrack} /></td>
                         })}
                     </tr>
                     {[...Array(5)].map((value) => {
@@ -70,7 +104,7 @@ export default function MonthView(props) {
                                 {[...Array(7)].map((value) => {
                                     if (dayTrack < days) {
                                         dayTrack++;
-                                        return <td><MonthCard currentDate={props.date} setDate={setDate} dateNum={dayTrack} /></td>
+                                        return <td><MonthCard currentDate={props.date} setIsOpen={setIsOpen} setDate={setDate} dateNum={dayTrack} /></td>
                                     }
                                 })}
                             </tr>
@@ -79,21 +113,30 @@ export default function MonthView(props) {
                 </tbody>
             </table>
 
-            <div id="modal-close-react" data-uk-modal>
-                <div className="uk-modal-dialog uk-modal-body">
-                    <button className="uk-modal-close-default" type="button" data-uk-close></button>
-                    <h2 className="uk-modal-title">{date.toDateString()}</h2>
-                    <TimeSelector label="12:00 AM" value={0}/>
-                    {[...Array(11)].map((value, index) => {
-                       return <TimeSelector label={(index+1)+":00 AM"} value={index}/>
-                    })}
-                    <TimeSelector label="12:00 PM" value={12}/>
-                    {[...Array(11)].map((value, index) => {
-                       return <TimeSelector label={(index+1)+":00 PM"} value={index+13}/>
-                    })}
+            <Modal
+            isOpen={modalIsOpen}
+            contentLabel={"Example Modal"}
+            style={{
+                content: {
+                    backgroundColor: "black"
+                }
+            }}>
+                <button onClick={()=>{setIsOpen(false)}} className="uk-button uk-button-secondary">Close</button>
+                <h2 className="uk-modal-title">{date.toDateString()}</h2>
+                <TimeSelector label="12:00 AM" value={0} />
+                {[...Array(11)].map((value, index) => {
+                    return <TimeSelector label={(index + 1) + ":00 AM"} value={index+1} />
+                })}
+                <TimeSelector label="12:00 PM" value={12} />
+                {[...Array(11)].map((value, index) => {
+                    return <TimeSelector label={(index + 1) + ":00 PM"} value={index + 13} />
+                })}
 
-                </div>
-            </div>
+            </Modal>
+
+
+
+
         </div>
     )
 }

@@ -40,15 +40,6 @@ export default function Home() {
             </div>
             </div>
 
-            <button className="uk-button uk-button-default uk-margin-small-right" type="button" data-uk-toggle="target: #modal-close-react">Nice button with react</button>
-            <div id="modal-close-react" data-uk-modal>
-                <div className="uk-modal-dialog uk-modal-body">
-                    <button className="uk-modal-close-default" type="button" data-uk-close></button>
-                    <h2 className="uk-modal-title">Modal title</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                </div>
-            </div>
-
             <div class="black-gd uk-modal-dialog uk-modal-body uk-align-center uk-margin-auto-vertical">
 
                 <button class="uk-modal-close-default" type="button" data-uk-close></button>
