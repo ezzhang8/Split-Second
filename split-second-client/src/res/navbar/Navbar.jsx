@@ -7,10 +7,10 @@ import './navbar.css';
 class Navbar extends Component {
     render() {
         return (
-            <nav class="uk-navbar-container uk-navbar uk-box-shadow-large custom-nav black-gd" uk-navbar>
-                <div class="uk-navbar-left">
-                    <ul class="uk-navbar-nav">
-                        <div class="uk-logo">
+            <nav className="uk-navbar-container uk-navbar uk-box-shadow-large custom-nav black-gd" data-uk-navbar>
+                <div className="uk-navbar-left">
+                    <ul className="uk-navbar-nav">
+                        <div className="uk-logo">
                             <Link to="/home">Split Second</Link>
                         </div>
                     </ul>
